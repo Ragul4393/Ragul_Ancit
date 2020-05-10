@@ -23,7 +23,7 @@ def door_lock():
         print("vehicle start move so door closed")
     except:
         print("Message not sent")
-        
+         
 def door_lock_with_window_close():
     data = centrallockingMsg.encode({'LockState':1,'AntiTheftSystemActive':0})
     message = can.Message(arbitration_id=centrallockingMsg.frame_id, data=data, is_extended_id=False)
@@ -70,13 +70,13 @@ def on_Message():
                 elif (vehicleCondition==1):
                     door_unlock_with_window_open()
                 
-        if message.arbitration_id == LockingRemoteMsg.frame_id:
+        elif message.arbitration_id == LockingRemoteMsg.frame_id:
             LockStates = (msgData['LockRequest'])
-            if(LockStates==1):
+            if(LockStates == 'Request_lock'):
                 door_lock_with_window_close()
-            elif (LockStates==2):
+            elif (LockStates == 'Request_unlock'):
                 door_unlock()
-        if message.arbitration_id == centrallockingMsg.frame_id:
+        elif message.arbitration_id == centrallockingMsg.frame_id:
             vehicle = (msgData['AntiTheftSystemActive'])
             if (vehicle == 1):
                 Theft_System_Active()
